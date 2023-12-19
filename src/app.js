@@ -1,7 +1,7 @@
 const express = require('express')
 const cors = require ('cors')
 const errorHandling = require('./error/errorHandling')
-const routes = require('./routes/routes')
+const routes = require('./routes/user.routes')
 
 const app = express()
 
