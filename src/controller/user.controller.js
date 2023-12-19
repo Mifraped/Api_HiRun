@@ -1,3 +1,5 @@
+const {connection} = require('../database')
+
 const getStart = (req, res) => {
     let respuesta = {error: false, codigo: 400, message: "Funciona!"}
     res.send(respuesta)
