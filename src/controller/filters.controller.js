@@ -32,7 +32,10 @@ const getResults = (req, res) => {
   const searchTerm = req.query.searchTerm;
 
   pool
-    .execute("SELECT * FROM business WHERE title LIKE ?", [`%${searchTerm}%`])
+    .execute(
+      `SELECT business.*, users.name AS providerName, users.surname AS providerSurname, users.photo AS userPhoto, service.price, service.description FROM business JOIN users ON business.provider = users.id_user JOIN service ON business.id_business = service.id_business WHERE business.title LIKE ?`,
+      [`%${searchTerm}%`]
+    )
     .then(([results, fields]) => {
       res.json(results);
     })
