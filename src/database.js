@@ -1,5 +1,5 @@
 const mysql = require("mysql2");
-const ddbbConfig = require("../ddbbConfig");
+// const ddbbConfig = require("../ddbbConfig");
 
 const connection = mysql.createConnection({
 	host: process.env.DB_HOST || "hirun.cxnp8cr5xgbf.eu-north-1.rds.amazonaws.com",
