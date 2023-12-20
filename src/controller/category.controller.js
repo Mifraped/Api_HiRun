@@ -1,10 +1,10 @@
-const { connection } = require("../database");
+const { pool } = require("../database");
 
 const postUserPref = async (req, res) => {
 	try {
 		let params = [req.body.user, req.body.category];
 		let sql = `INSERT INTO user_pref (user, category) VALUES (?, ?)`;
-		let [result] = await connection.query(sql, params);
+		let [result] = await pool.query(sql, params);
 		let user = console.log(result);
 
 		let answer = { error: false, code: 200, message: "Registro completado" };
@@ -18,4 +18,4 @@ const postUserPref = async (req, res) => {
 	}
 };
 
-module.exports = { getStart, postUser };
+module.exports = { postUserPref };

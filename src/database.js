@@ -1,7 +1,7 @@
 const mysql = require("mysql2");
 // const ddbbConfig = require("../ddbbConfig");
 
-const connection = mysql
+const pool = mysql
 	.createConnection({
 		host: process.env.DB_HOST || "hirun.cxnp8cr5xgbf.eu-north-1.rds.amazonaws.com",
 		user: process.env.DB_USER || "hirun_admin",
@@ -21,4 +21,4 @@ const connection = mysql
 // 	})
 // 	.promise();
 
-module.exports = { connection };
+module.exports = { pool };
