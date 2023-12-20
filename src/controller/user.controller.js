@@ -1,4 +1,4 @@
-const { connection } = require("../database");
+const { pool } = require("../database");
 
 const getStart = (req, res) => {
 	let respuesta = { error: false, codigo: 400, message: "Funciona!" };
@@ -8,7 +8,7 @@ const getStart = (req, res) => {
 const loginUser = async (req, res) => {
 	try {
 		let params = [req.body.email, req.body.password];
-		let sql = "SELECT id_user, email, name, surname, location, phonenumber, photo, company FROM hirun.user WHERE email = ? AND password = ?";
+		let sql = "SELECT id_user, email, name, surname, location, phonenumber, photo, company FROM hirun.users WHERE email = ? AND password = ?";
 		let [result] = await pool.query(sql, params);
 		let resultado = result[0];
 		let respuesta;
@@ -27,8 +27,9 @@ const postUser = async (req, res) => {
 	try {
 		let params = [req.body.email, req.body.password, req.body.name, req.body.surname, req.body.location, req.body.phoneNumber, req.body.photo];
 		let sql = `INSERT INTO users (email, password, name, surname, location, phoneNumber, photo) VALUES (?, ?, ?, ?, ?, ?, ?)`;
-		let [result] = await connection.query(sql, params);
-		let user = console.log(result);
+		let [result] = await pool.query(sql, params);
+		// let user =
+		console.log(result);
 
 		let answer = { error: false, code: 200, message: "Registro completado" };
 
