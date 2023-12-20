@@ -18,4 +18,4 @@ const postUserPref = async (req, res) => {
 	}
 };
 
-module.exports = { getStart, postUser };
+module.exports = { postUserPref };

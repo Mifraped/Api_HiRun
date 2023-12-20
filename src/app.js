@@ -1,7 +1,9 @@
 const express = require("express");
 const cors = require("cors");
 const errorHandling = require("./error/errorHandling");
-const routes = require("./routes/user.routes");
+const userRouter = require("./routers/user.routers");
+const businessRouter = require("./routers/business.routers");
+const serviceRouter = require("./routers/service.routers");
 
 const app = express();
 
@@ -12,7 +14,9 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 app.use(errorHandling);
-app.use(routes);
+app.use(userRouter);
+app.use(businessRouter);
+app.use(serviceRouter);
 
 app.use(function (req, res, next) {
 	res.status(404).json({
