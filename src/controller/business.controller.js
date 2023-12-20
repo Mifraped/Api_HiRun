@@ -19,4 +19,16 @@ const postBusiness = async (req, res) => {
 	}
 };
 
-module.exports = { postBusiness };
+const getBusiness = async (req, res) => {
+	try{
+		let params = [req.query.id_user]
+		let sql = "SELECT title, bus.photo, rating FROM hirun.users AS us INNER JOIN hirun.business AS bus ON (us.id_user = bus.provider) WHERE us.id_user = ?"
+		let [result] = await pool.query(sql, params)
+		let respuesta = { error: false, code: 200, message: "Enviando datos", data: result }
+		res.send(respuesta)
+	}catch(error){
+		console.log(error);
+	}
+}
+
+module.exports = { postBusiness, getBusiness };
