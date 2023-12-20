@@ -7,7 +7,7 @@ const postService = async (req, res) => {
 		let [result] = await pool.query(sql, params);
 		console.log(result);
 
-		let answer = { error: false, code: 200, message: "Servicio añadido", data: result };
+		let answer = { error: false, code: 200, message: "Servicio añadido", data: [result] };
 
 		res.send(answer);
 	} catch (err) {

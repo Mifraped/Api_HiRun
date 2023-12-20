@@ -4,6 +4,7 @@ const errorHandling = require("./error/errorHandling");
 const userRouter = require("./routers/user.routers");
 const businessRouter = require("./routers/business.routers");
 const serviceRouter = require("./routers/service.routers");
+const categoryRouter = require("./routers/category.routers");
 
 const app = express();
 
@@ -17,6 +18,7 @@ app.use(errorHandling);
 app.use(userRouter);
 app.use(businessRouter);
 app.use(serviceRouter);
+app.use(categoryRouter);
 
 app.use(function (req, res, next) {
 	res.status(404).json({
