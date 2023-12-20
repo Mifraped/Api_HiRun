@@ -2,8 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const errorHandling = require("./error/errorHandling");
 
-const userRoutes = require("./routes/user.routes");
-const filterRoutes = require("./routes/filter.routes");
+const filterRoutes = require("./routers/filter.routes");
 
 const userRouter = require("./routers/user.routers");
 const businessRouter = require("./routers/business.routers");
@@ -22,7 +21,6 @@ app.use(express.json());
 
 app.use(errorHandling);
 
-app.use(userRoutes);
 app.use(filterRoutes);
 
 app.use(userRouter);
