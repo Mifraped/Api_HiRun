@@ -15,4 +15,21 @@ const getNovedades = (req, res) => {
   );
 };
 
-module.exports = { getNovedades };
+const getResults = (req, res) => {
+  const searchTerm = req.query.searchTerm;
+
+  connection.query(
+    "SELECT * FROM business WHERE title LIKE ?",
+    [`%${searchTerm}%`],
+    (error, results) => {
+      if (error) {
+        console.log("Error querying the database", error);
+        res.status(500).send("Error querying the database");
+        return;
+      }
+      res.json(results);
+    }
+  );
+};
+
+module.exports = { getNovedades, getResults };
