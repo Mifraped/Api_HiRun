@@ -28,7 +28,8 @@ const postUser = async (req, res) => {
 		let params = [req.body.email, req.body.password, req.body.name, req.body.surname, req.body.location, req.body.phoneNumber, req.body.photo];
 		let sql = `INSERT INTO users (email, password, name, surname, location, phoneNumber, photo) VALUES (?, ?, ?, ?, ?, ?, ?)`;
 		let [result] = await connection.query(sql, params);
-		let user = console.log(result);
+		// let user =
+		console.log(result);
 
 		let answer = { error: false, code: 200, message: "Registro completado" };
 
