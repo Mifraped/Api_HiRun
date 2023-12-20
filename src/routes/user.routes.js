@@ -1,9 +1,12 @@
-const {Router} = require("express")
-const router = Router()
-const userCtrl = require('../controller/user.controller')
+const { Router } = require("express");
+const router = Router();
+const userCtrl = require("../controller/user.controller");
+const { testConnection } = require("../database");
 
-router.get("/", userCtrl.getStart)
+router.get("/", userCtrl.getStart);
 
-router.post("/login", userCtrl.loginUser)
+router.get("/test-db", testConnection);
 
-module.exports = router
+router.post("/login", userCtrl.loginUser);
+
+module.exports = router;
