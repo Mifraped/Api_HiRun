@@ -14,6 +14,7 @@ const pool = mysql
 // const ddbbConfig = require("../ddbbConfig");
 
 // .promise();
+
 //dejo comentado por si no os funciona
 // const connection = mysql
 // 	.createConnection({

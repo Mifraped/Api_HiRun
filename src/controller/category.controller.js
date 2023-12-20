@@ -18,4 +18,21 @@ const postUserPref = async (req, res) => {
 	}
 };
 
-module.exports = { getStart, postUser };
+const getCategory = async (req, res) => {
+	try {
+		let sql;
+		if (req.query.id == null) {
+			sql = `SELECT * FROM category`;
+		} else {
+			sql = `SELECT * FROM category WHERE id_category=${req.query.id}`;
+		}
+		let [result] = await pool.query(sql);
+		let answer = { error: false, code: 200, message: "OK", data: result };
+
+		res.send(answer);
+	} catch (err) {
+		console.log(err);
+	}
+};
+
+module.exports = { postUserPref, getCategory };
