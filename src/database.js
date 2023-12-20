@@ -1,18 +1,5 @@
 const mysql = require("mysql2");
 
-const testConnection = (req, res, next) => {
-  connection.query("SELECT 1", (error, results) => {
-    if (error) {
-      console.log("Error querying the database", error);
-      res.status(500).send("Error querying the database");
-      return;
-    }
-    res.send("Database connection works!");
-  });
-};
-
-// const ddbbConfig = require("../ddbbConfig");
-
 const pool = mysql
   .createPool({
     host:
@@ -23,6 +10,9 @@ const pool = mysql
     port: process.env.DB_PORT || 3306,
   })
   .promise();
+
+// const ddbbConfig = require("../ddbbConfig");
+
 // .promise();
 //dejo comentado por si no os funciona
 // const connection = mysql
@@ -35,4 +25,4 @@ const pool = mysql
 // 	})
 // 	.promise();
 
-module.exports = { pool, testConnection };
+module.exports = { pool };
