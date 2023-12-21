@@ -32,19 +32,21 @@ const getResults = (req, res) => {
   const searchTerm = req.query.searchTerm || "";
   const rating = req.query.rating;
 
+  console.log("searchTerm:", searchTerm);
+  console.log("rating:", rating);
+
   console.log("Query parameters:", req.query);
 
-  let query = `SELECT business.*, users.name AS providerName, users.surname AS providerSurname, users.photo AS userPhoto, service.price, service.description FROM business JOIN users ON business.provider = users.id_user JOIN service ON business.id_business = service.id_business`;
+  let query = `SELECT business.*, users.name AS providerName, users.surname AS providerSurname, users.photo AS userPhoto, service.price, service.description FROM business JOIN users ON business.provider = users.id_user JOIN service ON business.id_business = service.id_business WHERE 1=1`;
   let queryParams = [];
 
   if (searchTerm.trim() !== "") {
-    query += ` WHERE business.title LIKE ?`;
+    query += ` AND business.title LIKE ?`;
     queryParams.push(`%${searchTerm}%`);
   }
 
   if (rating) {
-    query +=
-      (searchTerm.trim() !== "" ? " AND" : " WHERE") + ` business.rating = ?`;
+    query += ` AND business.rating = ?`;
     queryParams.push(rating);
   }
 
