@@ -10,6 +10,7 @@ const serviceRouter = require("./routers/service.routers");
 const categoryRouter = require("./routers/category.routers");
 const businessCatRouter = require("./routers/business_cat.routers");
 const timeframeRouter = require("./routers/timeframe.routers");
+const optionRouter = require("./routers/option.routers");
 
 const app = express();
 
@@ -29,6 +30,7 @@ app.use(serviceRouter);
 app.use(categoryRouter);
 app.use(businessCatRouter);
 app.use(timeframeRouter);
+app.use(optionRouter);
 
 app.use(function (req, res, next) {
   res.status(404).json({
