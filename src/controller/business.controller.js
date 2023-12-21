@@ -20,15 +20,28 @@ const postBusiness = async (req, res) => {
 };
 
 const getBusiness = async (req, res) => {
-	try{
-		let params = [req.query.id_user]
-		let sql = "SELECT title, bus.photo, rating FROM hirun.users AS us INNER JOIN hirun.business AS bus ON (us.id_user = bus.provider) WHERE us.id_user = ?"
-		let [result] = await pool.query(sql, params)
-		let respuesta = { error: false, code: 200, message: "Enviando datos", data: result }
-		res.send(respuesta)
-	}catch(error){
+	try {
+		let sql;
+		let params;
+
+		//si se indica user id trae todos los negocios activos de un usuario(business-provided)
+		if (req.query.id_user) {
+			params = [req.query.id_user];
+			sql = "SELECT title, bus.photo, rating FROM hirun.users AS us INNER JOIN hirun.business AS bus ON (us.id_user = bus.provider) WHERE us.id_user = ?";
+			//si se indica el id del negocio trae de vuelta solo ese
+		} else if (req.query.id_business) {
+			params = [req.query.id_business];
+			sql = "SELECT * FROM business WHERE id_business = ?";
+		} else {
+			//todos
+			params = [];
+			sql = "SELECT * FROM hirun.business";
+		}
+		let [result] = await pool.query(sql, params);
+		let respuesta = { error: false, code: 200, message: "Enviando datos", data: result };
+		res.send(respuesta);
+	} catch (error) {
 		console.log(error);
 	}
-}
-
+};
 module.exports = { postBusiness, getBusiness };

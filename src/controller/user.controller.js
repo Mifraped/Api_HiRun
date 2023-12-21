@@ -46,16 +46,31 @@ const postUser = async (req, res) => {
 };
 
 const getRates = async (req, res) => {
-	try{
-		let params = [req.query.id_user]
-		let sql = "SELECT r.rate, r.comment, ru.name, ru.photo FROM hirun.users AS u INNER JOIN hirun.business AS b ON (u.id_user = b.provider) INNER JOIN hirun.service AS s ON (b.id_business = s.id_business) INNER JOIN hirun.rate AS r ON (s.id_service = r.id_service) INNER JOIN hirun.users AS ru ON (r.id_user = ru.id_user) WHERE u.id_user = ?"
-		let [result] = await pool.query(sql, params)
-		let respuesta = { error: false, code: 200, message: "Enviando datos", data: result }
+	try {
+		let params = [req.query.id_user];
+		let sql = "SELECT r.rate, r.comment, ru.name, ru.photo FROM hirun.users AS u INNER JOIN hirun.business AS b ON (u.id_user = b.provider) INNER JOIN hirun.service AS s ON (b.id_business = s.id_business) INNER JOIN hirun.rate AS r ON (s.id_service = r.id_service) INNER JOIN hirun.users AS ru ON (r.id_user = ru.id_user) WHERE u.id_user = ?";
+		let [result] = await pool.query(sql, params);
+		let respuesta = { error: false, code: 200, message: "Enviando datos", data: result };
 		console.log(result);
-		res.send(respuesta)
-	}catch(error){
-		console.log(error)
+		res.send(respuesta);
+	} catch (error) {
+		console.log(error);
 	}
-}
+};
 
-module.exports = { getStart, loginUser, postUser, getRates };
+const getUserInfo = async (req, res) => {
+	try {
+		let params = [req.query.id_user];
+		let sql = `SELECT * FROM users WHERE id_user = ?`;
+		let [result] = await pool.query(sql, params);
+		let answer = { error: false, code: 200, message: "OK", data: result };
+		res.send(answer);
+	} catch (err) {
+		let answer = { error: true, code: 0, message: "Se ha producido un error" };
+
+		res.send(answer);
+		console.log(err);
+	}
+};
+
+module.exports = { getStart, loginUser, postUser, getRates, getUserInfo };
