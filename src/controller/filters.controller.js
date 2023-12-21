@@ -63,7 +63,7 @@ const getResults = (req, res) => {
     queryParams.push(`%${searchTerm}%`);
   }
 
-  if (rating) {
+  if (rating !== undefined && rating !== null) {
     query += ` AND business.rating = ?`;
     queryParams.push(rating);
   }
