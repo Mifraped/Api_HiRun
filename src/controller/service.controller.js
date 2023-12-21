@@ -20,7 +20,7 @@ const postService = async (req, res) => {
 
 const getService = async (req, res) => {
 	let params = [req.query.id_user]
-	let sql = "SELECT ser.title, ser. price, bus.photo AS businessPhoto, book.date, book.canceled, usr.photo AS userPhoto FROM hirun.users AS us INNER JOIN hirun.business AS bus ON (us.id_user = bus.provider) INNER JOIN hirun.service AS ser ON (bus.id_business = ser.id_business) INNER JOIN hirun.booking AS book ON (ser.id_service = book.service) INNER JOIN hirun.users AS usr ON (book.user = usr.id_user) WHERE us.id_user = ?"
+	let sql = "SELECT ser.title, ser. price, bus.photo AS businessPhoto, book.date, book.canceled, usr.photo AS userPhoto FROM hirun.users AS us INNER JOIN hirun.business AS bus ON (us.id_user = bus.provider) INNER JOIN hirun.service AS ser ON (bus.id_business = ser.id_business) INNER JOIN hirun.booking AS book ON (ser.id_service = book.service) INNER JOIN hirun.users AS usr ON (book.user = usr.id_user) WHERE book.user = ?"
 	let [result] = await pool.query(sql, params)
 	let respuesta = { error: false, code: 200, message: "Enviando servicios solicitados", data: result }
 	res.send(respuesta)
