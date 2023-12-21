@@ -14,10 +14,24 @@ const testDbConnection = (req, res) => {
     });
 };
 
-const getNovedades = (req, res) => {
+const getBestRated = (req, res) => {
   pool
     .execute(
       "SELECT business.*, users.name AS providerName, users.surname AS providerSurname, users.photo AS userPhoto, service.price, service.description FROM business JOIN users ON business.provider = users.id_user JOIN service ON business.id_business = service.id_business WHERE business.rating >= 4"
+    )
+    .then(([results, fields]) => {
+      res.json(results);
+    })
+    .catch((error) => {
+      console.log("Error querying the database", error);
+      res.status(500).send("Error querying the database");
+    });
+};
+
+const getNovedades = (req, res) => {
+  pool
+    .execute(
+      "SELECT business.*, users.name AS providerName, users.surname AS providerSurname, users.photo AS userPhoto, service.price, service.description FROM business JOIN users ON business.provider = users.id_user JOIN service ON business.id_business = service.id_business ORDER BY business.create_date DESC LIMIT 5"
     )
     .then(([results, fields]) => {
       res.json(results);
@@ -49,6 +63,11 @@ const getResults = (req, res) => {
     queryParams.push(`%${searchTerm}%`);
   }
 
+  if (rating) {
+    query += ` AND business.rating = ?`;
+    queryParams.push(rating);
+  }
+
   if (minPrice) {
     query += ` AND service.price >= ?`;
     queryParams.push(minPrice);
@@ -71,4 +90,4 @@ const getResults = (req, res) => {
     });
 };
 
-module.exports = { testDbConnection, getNovedades, getResults };
+module.exports = { testDbConnection, getNovedades, getResults, getBestRated };
