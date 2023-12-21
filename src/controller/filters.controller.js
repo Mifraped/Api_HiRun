@@ -44,7 +44,7 @@ const getNovedades = (req, res) => {
 
 const getResults = (req, res) => {
   const searchTerm = req.query.searchTerm || "";
-  const rating = req.query.rating || 0;
+  const rating = req.query.rating;
   const minPrice = req.query.minPrice || 0;
   const maxPrice = req.query.maxPrice || 0;
 
