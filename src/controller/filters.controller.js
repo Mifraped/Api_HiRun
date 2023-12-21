@@ -31,9 +31,13 @@ const getNovedades = (req, res) => {
 const getResults = (req, res) => {
   const searchTerm = req.query.searchTerm || "";
   const rating = req.query.rating;
+  const minPrice = req.query.minPrice;
+  const maxPrice = req.query.maxPrice;
 
   console.log("searchTerm:", searchTerm);
   console.log("rating:", rating);
+  console.log("minPrice:", minPrice);
+  console.log("maxPrice:", maxPrice);
 
   console.log("Query parameters:", req.query);
 
@@ -45,17 +49,23 @@ const getResults = (req, res) => {
     queryParams.push(`%${searchTerm}%`);
   }
 
-  if (rating) {
-    query += ` AND business.rating = ?`;
-    queryParams.push(rating);
+  if (minPrice) {
+    query += ` AND service.price >= ?`;
+    queryParams.push(minPrice);
   }
 
+  if (maxPrice) {
+    query += ` AND service.price <= ?`;
+    queryParams.push(maxPrice);
+  }
+  console.log(query, queryParams);
   pool
     .execute(query, queryParams)
     .then(([results, fields]) => {
       res.json(results);
     })
     .catch((error) => {
+      console.log(error);
       console.log("Error querying the database", error);
       res.status(500).send("Error querying the database");
     });
