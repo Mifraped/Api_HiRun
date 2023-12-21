@@ -8,7 +8,7 @@ const getStart = (req, res) => {
 const loginUser = async (req, res) => {
 	try {
 		let params = [req.body.email, req.body.password];
-		let sql = "SELECT id_user, email, name, surname, location, phonenumber, photo, company FROM hirun.users WHERE email = ? AND password = ?";
+		let sql = "SELECT id_user, email, name, surname, location, phonenumber, photo, company, rate FROM hirun.users WHERE email = ? AND password = ?";
 		let [result] = await pool.query(sql, params);
 		let resultado = result[0];
 		let respuesta;
