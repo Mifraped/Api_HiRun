@@ -45,8 +45,8 @@ const getNovedades = (req, res) => {
 const getResults = (req, res) => {
   const searchTerm = req.query.searchTerm || "";
   const rating = req.query.rating;
-  const minPrice = req.query.minPrice || 0;
-  const maxPrice = req.query.maxPrice || 0;
+  const minPrice = req.query.minPrice;
+  const maxPrice = req.query.maxPrice;
 
   console.log("searchTerm:", searchTerm);
   console.log("rating:", rating);
