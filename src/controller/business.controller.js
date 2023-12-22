@@ -27,7 +27,7 @@ const getBusiness = async (req, res) => {
 		//si se indica user id trae todos los negocios activos de un usuario(business-provided)
 		if (req.query.id_user) {
 			params = [req.query.id_user];
-			sql = "SELECT title, bus.photo, rating, id_business FROM hirun.users AS us INNER JOIN hirun.business AS bus ON (us.id_user = bus.provider) WHERE us.id_user = ?";
+			sql = "SELECT title, bus.photo, rating, bus.id_business FROM hirun.users AS us INNER JOIN hirun.business AS bus ON (us.id_user = bus.provider) WHERE us.id_user = ?";
 			//si se indica el id del negocio trae de vuelta solo ese
 		} else if (req.query.id_business) {
 			params = [req.query.id_business];
