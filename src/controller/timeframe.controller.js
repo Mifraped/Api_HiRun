@@ -8,7 +8,7 @@ const postTimeframe = async (req, res) => {
 		let [result] = await pool.query(sql, params);
 		console.log(result);
 
-		let answer = { error: false, code: 200, message: "Franja horaria añadida al negocio", data: [result] };
+		let answer = { error: false, code: 200, message: "Franja horaria añadida al negocio", data: result };
 
 		res.send(answer);
 	} catch (err) {
@@ -19,4 +19,36 @@ const postTimeframe = async (req, res) => {
 	}
 };
 
-module.exports = { postTimeframe };
+const deleteTimeframe = async (req, res) => {
+	try {
+		let params = [req.query.id_timeframe];
+		let sql = `DELETE FROM timeframe WHERE id_timeframe = ?`;
+		let [result] = await pool.query(sql, params);
+		console.log(result);
+
+		let answer = { error: false, code: 200, message: "Franja horaria eliminada", data: result };
+
+		res.send(answer);
+	} catch (err) {
+		let answer = { error: true, code: 0, message: "Se ha producido un error" };
+
+		res.send(answer);
+		console.log(err);
+	}
+};
+
+const getTimeframe = async (req, res) => {
+	try {
+		let params = [req.query.id_business];
+		let sql = `SELECT * FROM timeframe WHERE id_business=?`;
+		let [result] = await pool.query(sql, params);
+		let answer = { error: false, code: 200, message: "datos recibidos", data: result };
+		res.send(answer);
+	} catch (err) {
+		let answer = { error: true, code: 0, message: "Se ha producido un error" };
+		res.send(answer);
+		console.log(err);
+	}
+};
+
+module.exports = { postTimeframe, deleteTimeframe, getTimeframe };
