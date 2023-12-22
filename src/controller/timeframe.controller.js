@@ -21,8 +21,15 @@ const postTimeframe = async (req, res) => {
 
 const deleteTimeframe = async (req, res) => {
 	try {
-		let params = [req.query.id_timeframe];
-		let sql = `DELETE FROM timeframe WHERE id_timeframe = ?`;
+		let params = [];
+		let sql;
+		if (req.query.id_timeframe) {
+			params = [req.query.id_timeframe];
+			sql = `DELETE FROM timeframe WHERE id_timeframe = ?`;
+		} else if (req.query.id_business) {
+			params = [req.query.id_business];
+			sql = `DELETE FROM timeframe WHERE id_business = ?`;
+		}
 		let [result] = await pool.query(sql, params);
 		console.log(result);
 

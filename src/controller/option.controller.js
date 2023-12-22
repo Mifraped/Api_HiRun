@@ -33,4 +33,26 @@ const getBusinessOptions = async (req, res) => {
 	}
 };
 
-module.exports = { postBusinessOption, getBusinessOptions };
+const deleteBusinessOptions = async (req, res) => {
+	try {
+		let params = [];
+		let sql;
+
+		if (req.query.business) {
+			params = [req.query.business];
+			sql = "DELETE FROM business_options WHERE business = ?";
+		} else if (req.query.id_business_options) {
+			params = [req.query.id_business_options];
+			sql = "DELETE FROM business_options WHERE id_business_options = ?";
+		}
+		let [result] = await pool.query(sql, params);
+		let answer = { error: false, code: 200, message: "opciones eliminadas del negocio", data: result };
+		res.send(answer);
+	} catch (err) {
+		let answer = { error: true, code: 0, message: "Se ha producido un error" };
+		res.send(answer);
+		console.log(err);
+	}
+};
+
+module.exports = { postBusinessOption, getBusinessOptions, deleteBusinessOptions };
