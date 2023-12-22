@@ -47,6 +47,7 @@ const getResults = (req, res) => {
   const rating = req.query.rating;
   const minPrice = req.query.minPrice;
   const maxPrice = req.query.maxPrice;
+  const category = req.query.category;
 
   console.log("searchTerm:", searchTerm);
   console.log("rating:", rating);
@@ -55,12 +56,24 @@ const getResults = (req, res) => {
 
   console.log("Query parameters:", req.query);
 
-  let query = `SELECT business.*, users.name AS providerName, users.surname AS providerSurname, users.photo AS userPhoto, service.price, service.description FROM business JOIN users ON business.provider = users.id_user JOIN service ON business.id_business = service.id_business WHERE 1=1`;
+  let query = ` SELECT business.*, users.name AS providerName, users.surname AS providerSurname, 
+  users.photo AS userPhoto, service.price, service.description, category.title AS categoryTitle
+  FROM business 
+  JOIN users ON business.provider = users.id_user 
+  JOIN service ON business.id_business = service.id_business 
+  JOIN business_cat ON business.id_business = business_cat.business 
+  JOIN category ON business_cat.category = category.id_category
+  WHERE 1=1`;
   let queryParams = [];
 
   if (searchTerm.trim() !== "") {
     query += ` AND business.title LIKE ?`;
     queryParams.push(`%${searchTerm}%`);
+  }
+
+  if (category && category.trim() !== "") {
+    query += ` AND category.title = ?`;
+    queryParams.push(category);
   }
 
   if (rating) {
@@ -77,7 +90,8 @@ const getResults = (req, res) => {
     query += ` AND service.price <= ?`;
     queryParams.push(maxPrice);
   }
-  console.log(query, queryParams);
+  console.log("Executing query:", query);
+  console.log("Query parameters:", queryParams);
   pool
     .execute(query, queryParams)
     .then(([results, fields]) => {
