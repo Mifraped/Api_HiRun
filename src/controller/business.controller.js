@@ -44,4 +44,33 @@ const getBusiness = async (req, res) => {
 		console.log(error);
 	}
 };
-module.exports = { postBusiness, getBusiness };
+
+const deleteBusiness = async (req, res) => {
+	try {
+		let params = [req.query.id_business];
+		let sql = "DELETE FROM business WHERE id_business = ?";
+		let [result] = await pool.query(sql, params);
+		let answer = { error: false, code: 200, message: "Negocio eliminado", data: result };
+		res.send(answer);
+	} catch (err) {
+		let answer = { error: true, code: 0, message: "Se ha producido un error" };
+		res.send(answer);
+		console.log(err);
+	}
+};
+
+const putBusiness = async (req, res) => {
+	try {
+		let params = [req.body.title, req.body.photo, req.body.id_business];
+		let sql = "UPDATE business SET title = COALESCE(?, title), photo = COALESCE(?, photo) WHERE id_business = ?";
+		let [result] = await pool.query(sql, params);
+		let answer = { error: false, code: 200, message: "Negocio editado", data: result };
+		res.send(answer);
+	} catch (err) {
+		let answer = { error: true, code: 0, message: "Se ha producido un error" };
+		res.send(answer);
+		console.log(err);
+	}
+};
+
+module.exports = { postBusiness, getBusiness, deleteBusiness, putBusiness };

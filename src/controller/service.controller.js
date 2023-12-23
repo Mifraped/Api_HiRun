@@ -12,7 +12,6 @@ const postService = async (req, res) => {
 		res.send(answer);
 	} catch (err) {
 		let answer = { error: true, code: 0, message: "Se ha producido un error" };
-
 		res.send(answer);
 		console.log(err);
 	}
@@ -44,4 +43,40 @@ const getService = async (req, res) => {
 	}
 };
 
-module.exports = { postService, getService };
+const putService = async (req, res) => {
+	try {
+		let params = [req.body.title, req.body.description, req.body.duration, req.body.price, req.body.id_business, req.body.id_service];
+		let sql = "UPDATE service SET title = COALESCE(?, title),description = COALESCE(?, description),duration = COALESCE(?, duration), price = COALESCE(?, price), id_business = COALESCE(?, id_business) WHERE id_service = ?";
+		let [result] = await pool.query(sql, params);
+		let answer = { error: false, code: 200, message: "Servicio editado", data: result };
+		res.send(answer);
+	} catch (err) {
+		let answer = { error: true, code: 0, message: "Se ha producido un error" };
+		res.send(answer);
+		console.log(err);
+	}
+};
+
+const deleteService = async (req, res) => {
+	try {
+		let params = [];
+		let sql;
+
+		if (req.query.id_service) {
+			params = [req.query.id_service];
+			sql = "DELETE FROM service WHERE id_service = ?";
+		} else if (req.query.id_business) {
+			params = [req.query.id_business];
+			sql = "DELETE FROM service WHERE id_business = ?";
+		}
+		let [result] = await pool.query(sql, params);
+		let answer = { error: false, code: 200, message: "Servicio eliminado", data: result };
+		res.send(answer);
+	} catch (err) {
+		let answer = { error: true, code: 0, message: "Se ha producido un error" };
+		res.send(answer);
+		console.log(err);
+	}
+};
+
+module.exports = { postService, getService, putService, deleteService };
