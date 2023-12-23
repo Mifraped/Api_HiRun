@@ -73,4 +73,22 @@ const getUserInfo = async (req, res) => {
 	}
 };
 
-module.exports = { getStart, loginUser, postUser, getRates, getUserInfo };
+const putUser = async (req, res) => {
+	try {
+		let params = [req.body.name, req.body.surname, req.body.location, req.body.phoneNumber, req.query.id_user]
+		let sql = "UPDATE hirun.users SET name = ?, surname = ?, location = ?, phoneNumber = ? WHERE id_user = ?"
+		let [result1] = await pool.query(sql, params)
+		let [result2] = await pool.query("SELECT id_user, email, name, surname, location, phoneNumber, photo, company, rate FROM hirun.users WHERE id_user = ?", [req.query.id_user])
+		let answer
+		if (result1.affectedRows == 1) {
+			answer = { error: false, codigo: 200, message: "Modificado correctamente", data: result1 }
+		} else {
+			answer = { error: true, codigo: 200, message: "No se pudo modificar", data: result2[0] }
+		}
+		res.send(answer)
+	} catch (error) {
+		console.log(error)
+	}
+}
+
+module.exports = { getStart, loginUser, postUser, getRates, getUserInfo, putUser };

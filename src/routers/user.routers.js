@@ -13,4 +13,6 @@ router.post("/register", userCtrl.postUser);
 
 router.get("/user", userCtrl.getUserInfo);
 
+router.put("/user", userCtrl.putUser)
+
 module.exports = router;
