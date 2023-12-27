@@ -18,7 +18,7 @@ const postImage = async (req, res) => {
 		upload.single("photo")(req, res, async (err) => {
 			if (err) {
 				console.error(err);
-				return res.status(500).json({ message: "Error uploading file." });
+				return res.status(500).json({ message: "Error uploading file.", error: err });
 			}
 
 			const photoPath = req.file.filename;
