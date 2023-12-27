@@ -3,8 +3,8 @@ const { pool } = require("../database");
 const postBusiness = async (req, res) => {
 	console.log(req.body);
 	try {
-		let params = [req.body.provider, req.body.title, req.body.photo];
-		let sql = `INSERT INTO business (provider, title, photo) VALUES (?, ?, ?)`;
+		let params = [req.body.provider, req.body.title, req.body.photo, req.body.create_date];
+		let sql = `INSERT INTO business (provider, title, photo, create_date) VALUES (?, ?, ?, ?)`;
 		let [result] = await pool.query(sql, params);
 		console.log(result);
 
