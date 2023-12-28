@@ -74,9 +74,10 @@ const getUserInfo = async (req, res) => {
 };
 
 const putUser = async (req, res) => {
+	console.log(req.body);
 	try {
-		let params = [req.body.name, req.body.surname, req.body.location, req.body.phoneNumber, req.query.id_user]
-		let sql = "UPDATE hirun.users SET name = ?, surname = ?, location = ?, phoneNumber = ? WHERE id_user = ?"
+		let params = [req.body.name, req.body.surname, req.body.location, req.body.phoneNumber, req.body.photo, req.query.id_user]
+		let sql = "UPDATE hirun.users SET name = ?, surname = ?, location = ?, phoneNumber = ?, photo = ? WHERE id_user = ?"
 		let [result1] = await pool.query(sql, params)
 		let [result2] = await pool.query("SELECT id_user, email, name, surname, location, phoneNumber, photo, company, rate FROM hirun.users WHERE id_user = ?", [req.query.id_user])
 		let answer

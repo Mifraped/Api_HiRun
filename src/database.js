@@ -1,4 +1,15 @@
 const mysql = require("mysql2");
+const { S3Client } = require("@aws-sdk/client-s3");
+
+
+// Create an S3 client
+const s3Client = new S3Client({
+  region: "eu-west-3",
+  credentials: {
+    accessKeyId: "AKIA3FZLB74P2IONL6Y5",
+    secretAccessKey: "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",
+  },
+});
 
 const pool = mysql
   .createPool({
@@ -26,4 +37,4 @@ const pool = mysql
 // 	})
 // 	.promise();
 
-module.exports = { pool };
+module.exports = { pool, s3Client };
