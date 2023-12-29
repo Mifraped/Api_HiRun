@@ -24,7 +24,7 @@ const getService = async (req, res) => {
 
 		if (req.query.id_user) {
 			params = [req.query.id_user];
-			sql = "SELECT ser.title, ser. price, bus.photo AS businessPhoto, book.date, book.canceled, usr.photo AS userPhoto FROM hirun.users AS us INNER JOIN hirun.business AS bus ON (us.id_user = bus.provider) INNER JOIN hirun.service AS ser ON (bus.id_business = ser.id_business) INNER JOIN hirun.booking AS book ON (ser.id_service = book.service) INNER JOIN hirun.users AS usr ON (book.user = usr.id_user) WHERE book.user = ?";
+			sql = "SELECT ser.title, ser. price, bus.photo AS businessPhoto, book.date, book.canceled, us.photo AS userPhoto FROM hirun.users AS us INNER JOIN hirun.business AS bus ON (us.id_user = bus.provider) INNER JOIN hirun.service AS ser ON (bus.id_business = ser.id_business) INNER JOIN hirun.booking AS book ON (ser.id_service = book.service) WHERE book.user = ?";
 		} else if (req.query.id_business) {
 			params = [req.query.id_business];
 			sql = "SELECT * FROM service WHERE id_business = ?";
