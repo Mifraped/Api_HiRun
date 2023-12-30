@@ -28,6 +28,10 @@ const getService = async (req, res) => {
 		} else if (req.query.id_business) {
 			params = [req.query.id_business];
 			sql = "SELECT * FROM service WHERE id_business = ?";
+		} else if (req.query.id_service) {
+			//un único servicio por su id
+			params = [req.query.id_service];
+			sql = "SELECT * FROM service WHERE id_service = ?";
 		} else {
 			//todos
 			params = [];
