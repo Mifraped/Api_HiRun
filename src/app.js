@@ -13,6 +13,7 @@ const timeframeRouter = require("./routers/timeframe.routers");
 const optionRouter = require("./routers/option.routers");
 const imageRouter = require("./routers/image.routers");
 const photoRouter = require("./routers/photo.routers");
+const bookingRouter = require("./routers/booking.routers");
 
 const app = express();
 
@@ -49,7 +50,7 @@ app.use(categoryRouter);
 app.use(businessCatRouter);
 app.use(timeframeRouter);
 app.use(optionRouter);
-app.use(imageRouter);
+app.use(bookingRouter);
 app.use(photoRouter);
 
 app.use(function (req, res, next) {
