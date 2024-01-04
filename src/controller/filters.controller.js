@@ -49,6 +49,7 @@ const getResults = (req, res) => {
   const maxPrice = req.query.maxPrice;
   const category = req.query.category;
   let otherValues = req.query.other;
+  let orderBy = req.query.orderBy;
 
   let query = `
 SELECT 
@@ -115,6 +116,21 @@ WHERE 1=1`;
 
   query += ` GROUP BY business.id_business`;
 
+  if (orderBy) {
+    switch (orderBy) {
+      case "Mejores Valorados":
+        orderBy = "rating";
+        break;
+      case "Más baratos":
+        orderBy = "price";
+        break;
+      case "Recientes":
+        orderBy = "create_date";
+        break;
+    }
+    query += ` ORDER BY ${orderBy}`;
+  }
+
   console.log(req.query);
 
   console.log("Executing query:", query);
@@ -132,4 +148,9 @@ WHERE 1=1`;
     });
 };
 
-module.exports = { testDbConnection, getNovedades, getResults, getBestRated };
+module.exports = {
+  testDbConnection,
+  getNovedades,
+  getResults,
+  getBestRated,
+};
