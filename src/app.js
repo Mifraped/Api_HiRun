@@ -14,6 +14,7 @@ const optionRouter = require("./routers/option.routers");
 const imageRouter = require("./routers/image.routers");
 const photoRouter = require("./routers/photo.routers");
 const bookingRouter = require("./routers/booking.routers");
+const chatRouter = require("./routers/chat.routers");
 
 const app = express();
 
@@ -52,6 +53,7 @@ app.use(timeframeRouter);
 app.use(optionRouter);
 app.use(bookingRouter);
 app.use(photoRouter);
+app.use(chatRouter);
 
 app.use(function (req, res, next) {
 	res.status(404).json({
