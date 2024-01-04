@@ -1,7 +1,6 @@
 const { pool } = require("../database");
 //a medias
 const postBusiness = async (req, res) => {
-	console.log(req.body);
 	try {
 		let params = [req.body.provider, req.body.title, req.body.photo, req.body.create_date];
 		let sql = `INSERT INTO business (provider, title, photo, create_date) VALUES (?, ?, ?, ?)`;
