@@ -19,6 +19,7 @@ const pool = mysql
     password: process.env.DB_PASSWORD || "2P1^u3h0go",
     database: process.env.DB_DATABASE || "hirun",
     port: process.env.DB_PORT || 3306,
+    multipleStatements: true
   })
   .promise();
 
