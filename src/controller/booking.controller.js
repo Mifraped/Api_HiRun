@@ -25,8 +25,8 @@ const getBooking = async (req, res) => {
 
 		//si se indica user id trae todas las reservas de un usuario(para el calendario)
 		if (req.query.user) {
-			params = [req.query.user];
-			sql = "SELECT booking.id_booking, booking.date, booking.time, booking.service, booking.user, booking.comment, booking.canceled FROM booking LEFT JOIN service ON booking.service = service.id_service  LEFT JOIN business ON service.id_business = business.id_business  WHERE booking.user = ? OR  (service.id_service IS NOT NULL AND business.provider = booking.user)";
+			params = [req.query.user, req.query.user];
+			sql = "SELECT booking.id_booking, booking.date, booking.time, booking.service, booking.user, booking.comment, booking.canceled FROM booking LEFT JOIN service ON booking.service = service.id_service  LEFT JOIN business ON service.id_business = business.id_business  WHERE booking.user = ? OR  (service.id_service IS NOT NULL AND business.provider = ?)";
 		}
 
 		let [result] = await pool.query(sql, params);
