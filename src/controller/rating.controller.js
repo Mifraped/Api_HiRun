@@ -51,6 +51,9 @@ const getRating = async (req, res) => {
 		} else if (req.query.id_user_avg) {
 			params = [req.query.id_user_avg];
 			sql = "SELECT id_rate, id_user , AVG(rate) AS rate, comment FROM rate AS r JOIN service AS s ON r.id_service = s.id_service JOIN business AS b ON  s.id_business = b.id_business WHERE b.provider = ?";
+		} else if (req.query.id_business) {
+			params = [req.query.id_business];
+			sql = "SELECT id_rate, id_user , AVG(rate) AS rate, comment FROM rate AS r JOIN service AS s ON r.id_service = s.id_service JOIN business AS b ON  s.id_business = b.id_business WHERE b.id_business = ?";
 		}
 
 		let [result] = await pool.query(sql, params);
