@@ -44,31 +44,38 @@ const getNovedades = (req, res) => {
 
 const getResults = (req, res) => {
   const searchTerm = req.query.searchTerm || "";
-  const rating = req.query.rating;
+  const rating = req.query.ratingFilter;
   const minPrice = req.query.minPrice;
   const maxPrice = req.query.maxPrice;
   const category = req.query.category;
+  let otherValues = req.query.other;
+  let orderBy = req.query.orderBy;
 
-  console.log("Query parameters:", req.query);
-
-  let query = ` SELECT business.*, users.name AS providerName, users.surname AS providerSurname, 
-  users.photo AS userPhoto, service.price, service.description, category.title AS categoryTitle
-  FROM business 
-  JOIN users ON business.provider = users.id_user 
-  JOIN service ON business.id_business = service.id_business 
-  JOIN business_cat ON business.id_business = business_cat.business 
+  let query = `
+SELECT 
+  business.*,
+  users.name AS providerName,
+  users.surname AS providerSurname,
+  users.photo AS userPhoto,
+  service.price,
+  service.description,
+  category.title AS categoryTitle,
+  GROUP_CONCAT(options.title) AS Opciones
+FROM
+  business
+  JOIN users ON business.provider = users.id_user
+  JOIN service ON business.id_business = service.id_business
+  JOIN business_cat ON business.id_business = business_cat.business
   JOIN category ON business_cat.category = category.id_category
-  WHERE 1=1`;
+  LEFT JOIN business_options ON business.id_business = business_options.business
+  LEFT JOIN options ON business_options.id_options = options.id_options
+WHERE 1=1`;
+
   let queryParams = [];
 
   if (searchTerm.trim() !== "") {
     query += ` AND business.title LIKE ?`;
     queryParams.push(`%${searchTerm}%`);
-  }
-
-  if (category && category.trim() !== "") {
-    query += ` AND category.title = ?`;
-    queryParams.push(category);
   }
 
   if (rating) {
@@ -85,8 +92,50 @@ const getResults = (req, res) => {
     query += ` AND service.price <= ?`;
     queryParams.push(maxPrice);
   }
+
+  if (category) {
+    query += ` AND category.title = ?`;
+    queryParams.push(category);
+  }
+
+  if (otherValues) {
+    if (typeof otherValues === "string") {
+      otherValues = [otherValues]; // If 'other' is a string, convert it to an array
+    }
+
+    query += " AND (";
+    otherValues.forEach((value, index) => {
+      if (index > 0) {
+        query += " OR ";
+      }
+      query += `options.title = ?`; // Add a condition for each option
+      queryParams.push(value); // Add the option to the query parameters
+    });
+    query += ")";
+  }
+
+  query += ` GROUP BY business.id_business`;
+
+  if (orderBy) {
+    switch (orderBy) {
+      case "Mejores Valorados":
+        orderBy = "rating";
+        break;
+      case "Más baratos":
+        orderBy = "price";
+        break;
+      case "Recientes":
+        orderBy = "create_date";
+        break;
+    }
+    query += ` ORDER BY ${orderBy}`;
+  }
+
+  console.log(req.query);
+
   console.log("Executing query:", query);
   console.log("Query parameters:", queryParams);
+
   pool
     .execute(query, queryParams)
     .then(([results, fields]) => {
@@ -99,4 +148,9 @@ const getResults = (req, res) => {
     });
 };
 
-module.exports = { testDbConnection, getNovedades, getResults, getBestRated };
+module.exports = {
+  testDbConnection,
+  getNovedades,
+  getResults,
+  getBestRated,
+};
