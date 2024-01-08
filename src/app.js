@@ -13,6 +13,10 @@ const timeframeRouter = require("./routers/timeframe.routers");
 const optionRouter = require("./routers/option.routers");
 const imageRouter = require("./routers/image.routers");
 const photoRouter = require("./routers/photo.routers");
+const bookingRouter = require("./routers/booking.routers");
+const chatRouter = require("./routers/chat.routers");
+const preferencesRouter = require("./routers/preferences.routers");
+const ratingRouter = require("./routers/rating.routers");
 
 const app = express();
 
@@ -49,8 +53,11 @@ app.use(categoryRouter);
 app.use(businessCatRouter);
 app.use(timeframeRouter);
 app.use(optionRouter);
-app.use(imageRouter);
+app.use(bookingRouter);
 app.use(photoRouter);
+app.use(chatRouter);
+app.use(preferencesRouter);
+app.use(ratingRouter);
 
 app.use(function (req, res, next) {
 	res.status(404).json({

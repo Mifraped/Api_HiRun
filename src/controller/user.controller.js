@@ -30,8 +30,7 @@ const postUser = async (req, res) => {
 		let [result] = await pool.query(sql, params);
 		// let user =
 		console.log(result);
-
-		let answer = { error: false, code: 200, message: "Registro completado" };
+		let answer = { error: false, code: 200, message: "Registro completado", data: { "id_user": result.insertId } };
 
 		res.send(answer);
 	} catch (err) {
