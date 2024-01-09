@@ -37,6 +37,20 @@ const getBooking = async (req, res) => {
 	}
 };
 
+const putBooking = async (req, res) => {
+	try {
+		let params = [req.body.id_booking];
+		let sql = "UPDATE booking SET canceled = 1 WHERE id_booking = ?";
+		let [result] = await pool.query(sql, params);
+		let answer = { error: false, code: 200, message: "Reserva cancelada", data: result };
+		res.send(answer);
+	} catch (err) {
+		let answer = { error: true, code: 0, message: "Se ha producido un error" };
+		res.send(answer);
+		console.log(err);
+	}
+};
+
 const deleteBooking = async (req, res) => {
 	try {
 		let params = [req.query.id_booking];
@@ -51,4 +65,4 @@ const deleteBooking = async (req, res) => {
 	}
 };
 
-module.exports = { postBooking, getBooking, deleteBooking };
+module.exports = { postBooking, getBooking, deleteBooking, putBooking };
