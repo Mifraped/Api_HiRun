@@ -60,8 +60,8 @@ const deleteBusiness = async (req, res) => {
 
 const putBusiness = async (req, res) => {
 	try {
-		let params = [req.body.title, req.body.photo, req.body.id_business];
-		let sql = "UPDATE business SET title = COALESCE(?, title), photo = COALESCE(?, photo) WHERE id_business = ?";
+		let params = [req.body.title, req.body.photo, req.body.address, req.body.id_business];
+		let sql = "UPDATE business SET title = COALESCE(?, title), photo = COALESCE(?, photo), address = COALESCE(?, address) WHERE id_business = ?";
 		let [result] = await pool.query(sql, params);
 		let answer = { error: false, code: 200, message: "Negocio editado", data: result };
 		res.send(answer);
