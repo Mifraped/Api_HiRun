@@ -20,7 +20,12 @@ const pool = mysql
     password: process.env.DB_PASSWORD,
     database: process.env.DB_DATABASE || "hirun",
     port: process.env.DB_PORT || 3306,
-    multipleStatements: true
+    multipleStatements: true,
+    waitForConnections: true,
+    connectionLimit: 300,
+    maxIdle: 10,
+    idleTimeout: 60000,
+    queueLimit: 0
   })
   .promise();
 
