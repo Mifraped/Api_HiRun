@@ -1,5 +1,6 @@
 const mysql = require("mysql2");
 const { S3Client } = require("@aws-sdk/client-s3");
+require('dotenv').config();
 
 
 // Create an S3 client
