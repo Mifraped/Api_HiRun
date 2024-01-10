@@ -34,7 +34,7 @@ const getBusiness = async (req, res) => {
 		} else {
 			//todos
 			params = [];
-			sql = "SELECT * FROM hirun.business";
+			sql = "SELECT business.*, users.name AS providerName, users.surname AS providerSurname, users.photo AS userPhoto, service.price, service.description FROM business JOIN users ON business.provider = users.id_user JOIN service ON business.id_business = service.id_business ORDER BY business.create_date DESC";
 		}
 		let [result] = await pool.query(sql, params);
 		let respuesta = { error: false, code: 200, message: "Enviando datos", data: result };
