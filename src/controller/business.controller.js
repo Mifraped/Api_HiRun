@@ -31,10 +31,13 @@ const getBusiness = async (req, res) => {
 		} else if (req.query.id_business) {
 			params = [req.query.id_business];
 			sql = "SELECT * FROM business WHERE id_business = ?";
+		} else if (req.query.minRate) {
+			params = [req.query.minRate];
+			sql = "SELECT business.*, users.name AS providerName, users.surname AS providerSurname, users.photo AS userPhoto, service.price, service.description FROM business JOIN users ON business.provider = users.id_user JOIN service ON business.id_business = service.id_business WHERE business.rating >= ?";
 		} else {
 			//todos
 			params = [];
-			sql = "SELECT business.*, users.name AS providerName, users.surname AS providerSurname, users.photo AS userPhoto, service.price, service.description FROM business JOIN users ON business.provider = users.id_user JOIN service ON business.id_business = service.id_business ORDER BY business.create_date DESC";
+			sql = "SELECT business.*, users.name AS providerName, users.surname AS providerSurname, users.photo AS userPhoto, service.price, service.description FROM business JOIN users ON business.provider = users.id_user JOIN service ON business.id_business = service.id_business ORDER BY business.create_date DESC limit 50";
 		}
 		let [result] = await pool.query(sql, params);
 		let respuesta = { error: false, code: 200, message: "Enviando datos", data: result };
