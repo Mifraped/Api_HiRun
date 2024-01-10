@@ -31,7 +31,7 @@ const getBestRated = (req, res) => {
 const getNovedades = (req, res) => {
   pool
     .execute(
-      'SELECT business.*, users.name AS providerName, users.surname AS providerSurname, users.photo AS userPhoto, service.price, service.description FROM business JOIN users ON business.provider = users.id_user JOIN service ON business.id_business = service.id_business ORDER BY business.create_date DESC LIMIT 5'
+      'SELECT business.*, users.name AS providerName, users.surname AS providerSurname, users.photo AS userPhoto, service.price, service.description FROM business JOIN users ON business.provider = users.id_user JOIN service ON business.id_business = service.id_business ORDER BY business.create_date DESC LIMIT 10'
     )
     .then(([results, fields]) => {
       res.json(results);
