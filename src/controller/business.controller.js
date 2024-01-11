@@ -26,15 +26,18 @@ const getBusiness = async (req, res) => {
 		//si se indica user id trae todos los negocios activos de un usuario(business-provided)
 		if (req.query.id_user) {
 			params = [req.query.id_user];
-			sql = "SELECT title, bus.photo, rating, bus.id_business FROM hirun.users AS us INNER JOIN hirun.business AS bus ON (us.id_user = bus.provider) WHERE us.id_user = ? ORDER BY bus.id_business DESC";
+			sql = "SELECT title, bus.photo, rating, bus.id_business, bus.provider FROM hirun.users AS us INNER JOIN hirun.business AS bus ON (us.id_user = bus.provider) WHERE us.id_user = ? ORDER BY bus.id_business DESC";
 			//si se indica el id del negocio trae de vuelta solo ese
 		} else if (req.query.id_business) {
 			params = [req.query.id_business];
 			sql = "SELECT * FROM business WHERE id_business = ?";
+		} else if (req.query.minRate) {
+			params = [req.query.minRate];
+			sql = "SELECT business.*, users.name AS providerName, users.surname AS providerSurname, users.photo AS userPhoto, service.price, service.description FROM business JOIN users ON business.provider = users.id_user JOIN service ON business.id_business = service.id_business WHERE business.rating >= ?";
 		} else {
 			//todos
 			params = [];
-			sql = "SELECT * FROM hirun.business";
+			sql = "SELECT business.*, users.name AS providerName, users.surname AS providerSurname, users.photo AS userPhoto, service.price, service.description FROM business JOIN users ON business.provider = users.id_user JOIN service ON business.id_business = service.id_business ORDER BY business.create_date DESC limit 50";
 		}
 		let [result] = await pool.query(sql, params);
 		let respuesta = { error: false, code: 200, message: "Enviando datos", data: result };
@@ -72,4 +75,18 @@ const putBusiness = async (req, res) => {
 	}
 };
 
-module.exports = { postBusiness, getBusiness, deleteBusiness, putBusiness };
+const getRecommendedBusiness = async (req, res) => {
+	try {
+		let params = [req.query.id_user];
+		let sql = "SELECT b.*, u.name AS providerName, u.surname AS providerSurname, u.photo AS userPhoto, s.price, s.description FROM user_pref INNER JOIN business_cat ON (user_pref.category = business_cat.category) INNER JOIN service AS s ON (business_cat.business = s.id_business) INNER JOIN business AS b ON (s.id_business = b.id_business) INNER JOIN users AS u ON (b.provider = u.id_user) WHERE user = ? AND b.rating >= 3 ORDER BY b.id_business DESC";
+		let [result] = await pool.query(sql, params);
+		let respuesta = { error: false, code: 200, message: "Enviando datos", data: result };
+		res.send(respuesta);
+	} catch (error) {
+		let answer = { error: true, code: 0, message: "Se ha producido un error" };
+		res.send(answer);
+		console.log(error);
+	}
+}
+
+module.exports = { postBusiness, getBusiness, deleteBusiness, putBusiness, getRecommendedBusiness };
