@@ -1,8 +1,9 @@
-const { pool } = require('../database');
+const { pool } = require("../database");
 
 const getChat = async (req, res) => {
   try {
     const chatId = req.params.id_chat;
+    console.log("Chat ID:", chatId);
 
     const sql = `
 SELECT 
@@ -27,14 +28,14 @@ WHERE chat.id_chat = ?
 ORDER BY message.timestamp DESC
 LIMIT 1`;
 
-    pool.query(sql, [chatId], function (error, results) {
-      if (error) throw error;
+    console.log("getChat called with chatId:", chatId);
 
-      console.log('Results0:', results[0]);
-      res.status(200).json(results[0]);
-    });
+    const [results] = await pool.query(sql, [chatId]);
+    console.log("Results0:", results[0]);
+    res.status(200).json(results[0]);
   } catch (error) {
-    res.status(500).json({ error: error.toString() });
+    console.error("Error in pool.query:", error);
+    res.status(500).json({ error: "An error occurred while getting the chat" });
   }
 };
 
@@ -71,16 +72,16 @@ ORDER BY
   message.timestamp ASC
   `;
 
-    console.log('Executing query:', sql, 'With userId:', userId);
+    console.log("Executing query:", sql, "With userId:", userId);
 
     const [rows] = await pool.query(sql, [userId, userId]);
 
-    console.log('Query results:', rows);
+    console.log("Query results:", rows);
 
     res.status(200).json(rows);
   } catch (err) {
-    console.error('Error in getChats:', err);
-    res.status(500).json({ error: 'Internal server error' });
+    console.error("Error in getChats:", err);
+    res.status(500).json({ error: "Internal server error" });
   }
 };
 
@@ -95,74 +96,89 @@ const getMessages = async (req, res) => {
       ORDER BY timestamp ASC
     `;
 
-    console.log('Executing query:', sql, 'With chatId:', chatId);
+    console.log("Executing query:", sql, "With chatId:", chatId);
 
     const [rows] = await pool.query(sql, [chatId]);
 
-    console.log('Query results:', rows);
+    console.log("Query results:", rows);
 
     res.status(200).json(rows);
   } catch (err) {
-    console.error('Error in getMessages:', err);
-    res.status(500).json({ error: 'Internal server error' });
+    console.error("Error in getMessages:", err);
+    res.status(500).json({ error: "Internal server error" });
   }
 };
 
 const sendMessage = async (req, res) => {
   try {
-    console.log('Request body:', req.body);
+    console.log("Request body:", req.body);
 
     const { chatId, sender, text } = req.body;
     const sql = `INSERT INTO message (id_chat, sender, text) VALUES (?, ?, ?)`;
 
-
-    console.log('Executing query:', sql, 'With params:', [chatId, sender, text]);
+    console.log("Executing query:", sql, "With params:", [
+      chatId,
+      sender,
+      text,
+    ]);
 
     const [rows] = await pool.query(sql, [chatId, sender, text]);
 
-    console.log('Query results:', rows);
+    console.log("Query results:", rows);
 
     res.status(200).json(rows);
   } catch (err) {
-    console.error('Error in sendMessage:', err);
-    res.status(500).json({ error: 'Internal server error' });
+    console.error("Error in sendMessage:", err);
+    res.status(500).json({ error: "Internal server error" });
   }
 };
 
 const createChat = async (req, res) => {
-  console.log('createChat called with req.body:', req.body);
+  console.log("createChat called with req.body:", req.body);
 
   try {
     const { userId, providerId } = req.body;
 
     // Check if chat already exists
-    const checkSql = 'SELECT * FROM chat WHERE (user1 = ? AND user2 = ?) OR (user1 = ? AND user2 = ?)';
-    const [existingChats] = await pool.query(checkSql, [userId, providerId, providerId, userId]);
+    const checkSql =
+      "SELECT * FROM chat WHERE (user1 = ? AND user2 = ?) OR (user1 = ? AND user2 = ?)";
+    const [existingChats] = await pool.query(checkSql, [
+      userId,
+      providerId,
+      providerId,
+      userId,
+    ]);
 
-    console.log('Existing chats:', existingChats);
+    console.log("Existing chats:", existingChats);
 
     if (existingChats.length > 0) {
-      console.log('Chat already exists, not creating a new one');
-      return res.status(400).json({ error: true, message: 'Chat already exists' });
+      console.log("Chat already exists, not creating a new one");
+      return res
+        .status(400)
+        .json({ error: true, message: "Chat already exists" });
     }
 
     // If chat does not exist, create a new one
-const sql = 'INSERT INTO chat (user1, user2) VALUES (?, ?)';
-const params = [userId, providerId];
+    const sql = "INSERT INTO chat (user1, user2) VALUES (?, ?)";
+    const params = [userId, providerId];
 
-console.log('Creating new chat with params:', params);
+    console.log("Creating new chat with params:", params);
 
-const result = await pool.query(sql, params);
+    const result = await pool.query(sql, params);
 
-console.log('Result of insert operation:', result);
+    console.log("Result of insert operation:", result);
 
-// Return the chatId of the newly created chat
-res.status(200).json({ error: false, message: 'Chat created successfully', chatId: result[0].insertId });
+    // Return the chatId of the newly created chat
+    res.status(200).json({
+      error: false,
+      message: "Chat created successfully",
+      chatId: result[0].insertId,
+    });
   } catch (error) {
-    console.log('Error occurred:', error);
+    console.log("Error occurred:", error);
     res.status(500).json({
       error: true,
-      message: 'An error occurred while creating the chat',
+      message: "An error occurred while creating the chat",
     });
   }
 };
