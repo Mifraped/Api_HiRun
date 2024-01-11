@@ -78,7 +78,7 @@ const putBusiness = async (req, res) => {
 const getRecommendedBusiness = async (req, res) => {
 	try {
 		let params = [req.query.id_user];
-		let sql = "SELECT b.*, u.name AS providerName, u.surname AS providerSurname, u.photo AS userPhoto, s.price, s.description FROM user_pref INNER JOIN business_cat ON (user_pref.category = business_cat.category) INNER JOIN service AS s ON (business_cat.business = s.id_business) INNER JOIN business AS b ON (s.id_business = b.id_business) INNER JOIN users AS u ON (b.provider = u.id_user) WHERE user = ? AND b.rating >= 3 ORDER BY b.id_business DESC";
+		let sql = "SELECT main.*, sub.avg_rate FROM (SELECT DISTINCT b.id_business, b.provider, b.title, b.photo, b.create_date, b.address, u.name AS providerName, u.surname AS providerSurname, u.photo AS userPhoto, s.price, s.description, s.id_service FROM user_pref INNER JOIN business_cat ON (user_pref.category = business_cat.category) INNER JOIN service AS s ON (business_cat.business = s.id_business) INNER JOIN business AS b ON (s.id_business = b.id_business) INNER JOIN users AS u ON (b.provider = u.id_user) WHERE user = ?) AS main INNER JOIN (SELECT id_service, AVG(rate) AS avg_rate FROM hirun.rate GROUP BY id_service) AS sub ON main.id_service = sub.id_service WHERE sub.avg_rate > 2.5 ORDER BY main.id_business DESC;";
 		let [result] = await pool.query(sql, params);
 		let respuesta = { error: false, code: 200, message: "Enviando datos", data: result };
 		res.send(respuesta);
