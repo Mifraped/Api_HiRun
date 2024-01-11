@@ -19,8 +19,11 @@ const pool = mysql
     database: process.env.DB_DATABASE || 'hirun',
     port: process.env.DB_PORT || 3306,
     multipleStatements: true,
+
   })
   .promise();
+
+
 
 // const ddbbConfig = require("../ddbbConfig");
 
