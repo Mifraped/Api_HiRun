@@ -5,6 +5,7 @@ const businessCtrl = require("../controller/business.controller");
 router.post("/business", businessCtrl.postBusiness);
 
 router.get("/business", businessCtrl.getBusiness);
+router.get("/recommendedBusiness", businessCtrl.getRecommendedBusiness);
 router.delete("/business", businessCtrl.deleteBusiness);
 router.put("/business", businessCtrl.putBusiness);
 
