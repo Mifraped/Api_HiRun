@@ -24,9 +24,7 @@ const path = require("path");
 
 app.set("port", process.env.PORT || 3000);
 
-app.use(cors({
-	origin: '*', // permitir solicitudes desde este origen
-}));
+app.use(cors());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
