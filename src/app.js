@@ -18,15 +18,13 @@ const chatRouter = require("./routers/chat.routers");
 const preferencesRouter = require("./routers/preferences.routers");
 const ratingRouter = require("./routers/rating.routers");
 
-const app = express();
+const app = express(['https://hi-run.vercel.app/', 'http://localhost:4200/']);
 
 const path = require("path");
 
 app.set("port", process.env.PORT || 3000);
 
-app.use(cors({
-	origin: '*', // permitir solicitudes desde este origen
-}));
+app.use(cors());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
