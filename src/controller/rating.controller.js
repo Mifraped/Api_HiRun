@@ -47,7 +47,7 @@ const getRating = async (req, res) => {
 			//else: si se indica solo id_user del provider, obtener todos los rating donde ese user sea provider
 		} else if (req.query.id_provider) {
 			params = [req.query.id_provider];
-			sql = "SELECT id_rate, id_user , rate, comment FROM rate AS r JOIN service AS s ON r.id_service = s.id_service JOIN business AS b ON  s.id_business = b.id_business WHERE b.provider = ?";
+			sql = "SELECT id_rate, id_user , rate, comment FROM rate AS r JOIN service AS s ON r.id_service = s.id_service JOIN business AS b ON  s.id_business = b.id_business WHERE b.provider = ? ORDER BY id_rate DESC";
 		} else if (req.query.id_user_avg) {
 			params = [req.query.id_user_avg];
 			sql = "SELECT id_rate, id_user , AVG(rate) AS rate, comment FROM rate AS r JOIN service AS s ON r.id_service = s.id_service JOIN business AS b ON  s.id_business = b.id_business WHERE b.provider = ?";
